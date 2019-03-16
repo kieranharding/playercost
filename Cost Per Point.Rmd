@@ -1,0 +1,42 @@
+---
+title: "NBA Player Cost"
+author: "Kieran Harding"
+date: "March 16, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(plotly)
+```
+
+
+```{r prepare data, include=FALSE, warning=FALSE, message=FALSE}
+salarydat <- './data/salary.csv'
+scoredat <- './data/boxscores.csv'
+
+sal <- read_csv(salarydat) %>%
+    select(name = Player, salary = season17_18)
+
+score <- read_csv(scoredat) %>% 
+    select(name = playDispNm, playPTS, playMin) %>%
+    group_by(name) %>%
+    summarise(points = sum(playPTS), min = sum(playMin))
+
+df <- inner_join(sal, score, by = "name") %>%
+    mutate(cost_per_point = salary / points)
+```
+
+```{r chart, warning=FALSE, message=FALSE}
+plot_ly(df, x = ~salary, y = ~points, 
+        hoverinfo = "text", hovertext = ~name) %>%
+    layout(title = '2017/18 NBA Season player cost by scoring')
+           
+```
+
+
+I expected to see a stronger upward trend than this, but it's there
+a little bit.
+
+Player game stats from https://www.kaggle.com/pablote/nba-enhanced-stats/version/27# and salary data from https://www.kaggle.com/koki25ando/salary.
