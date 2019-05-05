@@ -1,8 +1,8 @@
 ---
 title: "NBA Player Cost"
 author: "Kieran Harding"
-date: "March 16, 2019"
-output: html_document
+date: "May 5, 2019"
+output: ioslides_presentation
 ---
 
 ```{r setup, include=FALSE}
@@ -28,13 +28,14 @@ df <- inner_join(sal, score, by = "name") %>%
     mutate(cost_per_point = salary / points)
 ```
 
+---
+
 ```{r chart, warning=FALSE, message=FALSE}
 plot_ly(df, x = ~salary, y = ~points, 
-        hoverinfo = "text", hovertext = ~name) %>%
-    layout(title = '2017/18 NBA Season player cost by scoring')
-           
+        hoverinfo = "text", hovertext = ~name)
 ```
 
+---
 
 I expected to see a stronger upward trend than this, but it's there
 a little bit.
